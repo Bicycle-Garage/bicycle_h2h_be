@@ -37,7 +37,7 @@ RSpec.describe "Users Endpoints" do
         expect(response.status).to eq(422)
       end
 
-      it "can't create a user with out a passwordConf" do
+      it "can't create a user with out a password conf" do
         post "/api/v1/users",
              params: {
                email: "sw@gmail.com",
@@ -76,32 +76,6 @@ RSpec.describe "Users Endpoints" do
     end
 
     describe 'sad path' do
-    end
-  end
-
-  describe "user login" do
-    describe "sad path" do
-      it "cant log in with an incorrect password" do
-        user = User.create(email: "sw@gmail.com", password: "abc123")
-
-        post "/api/v1/login",
-            params: {
-              email: "sw@gmail.com",
-              password: "aac123",
-            }
-        expect(response.status).to eq(401)
-      end
-
-      it "cant log in with an incorrect email" do
-        user = User.create(email: "sw@gmail.com", password: "abc123")
-
-        post "/api/v1/login",
-            params: {
-              email: "sww@gmail.com",
-              password: "abc123",
-            }
-        expect(response.status).to eq(401)
-      end
     end
   end
 end
