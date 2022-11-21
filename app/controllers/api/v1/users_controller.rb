@@ -32,17 +32,6 @@ class Api::V1::UsersController < ApplicationController
     @user.destroy
   end
 
-  #POST /login
-  def login
-  user = User.find_by(email: params[:email].downcase)
-    if user&.authenticate(params[:password])
-      session[:user_id] = user.id
-      render json: user
-    else
-      render json: {messages: ["Invalid Email or Password"]}, status: :unauthorized
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
