@@ -1,23 +1,15 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:update, :destroy]
 
-  # GET /users
-  def index
-    @users = User.all
-
-    render json: @users
+  def new
+    @user = User.new
   end
-
-  # GET /users/1
-  def show
-    render json: @user
-  end
-
+  
   # POST /users
   def create
     @user = user_params
     @user[:email] = @user[:email].downcase
-    @new_user = User.new(user_params)
+    @new_user = User.new(@user)
 
     if @new_user.save
       render json: @new_user, status: :created, location: @user
@@ -40,10 +32,15 @@ class Api::V1::UsersController < ApplicationController
     @user.destroy
   end
 
-  #Post /login
+  #POST /login
   def login
-    user = User.find_by(email: params[:email].downcase)
-    render json: user
+  user = User.find_by(email: params[:email].downcase)
+    if user&.authenticate(params[:password])
+      session[:user_id] = user.id
+      render json: user
+    else
+      render json: {messages: ["Invalid Email or Password"]}, status: :unauthorized
+    end
   end
 
   private
